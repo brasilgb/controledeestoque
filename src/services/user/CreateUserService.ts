@@ -1,5 +1,5 @@
 import prismaClient from "../../prisma";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 import { UserRequest } from "../../models/interfaces/user/UserRequest";
 class CreateUserService {
     async execute({ name, email, password }: UserRequest) {
@@ -34,7 +34,7 @@ class CreateUserService {
             }
         })
 
-
+        return user;
     }
 }
 
