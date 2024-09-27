@@ -1,4 +1,4 @@
-import { Router, Request, Response, request} from "express";
+import { Router, Request, Response, request } from "express";
 import { CreateUserController } from "./controllers/user/CreateUserController";
 import { AuthUserController } from "./controllers/user/AuthUserController";
 import { isAuthenticated } from "./middlewares/isAuthenticated";
@@ -11,10 +11,15 @@ import { RemoveCategoryController } from "./controllers/category/RemoveCategoryC
 import multer from "multer";
 import uploadConfig from "./config/multer";
 import { CreateProductController } from "./controllers/products/CreateProductController";
+import { EditProductController } from "./controllers/products/EditProductController";
+import { ListProductByCategoryController } from "./controllers/products/ListProductByCategoryController";
+import { ListProductsController } from "./controllers/products/ListProductsController";
+import { RemoveProductController } from "./controllers/products/RemoveProductController";
+import { SaleProductController } from "./controllers/sale/SaleProductController";
 
 const router = Router();
 router.get("/test", (request: Request, response: Response) => {
-    return response.json({ok: true});
+    return response.json({ ok: true });
 });
 
 const upload = multer(uploadConfig.upload("./tmp"));
@@ -34,6 +39,13 @@ router.delete('/category/remove', isAuthenticated, new RemoveCategoryController(
 
 // Products routes
 router.post('/product', isAuthenticated, upload.single("file"), new CreateProductController().handle);
+router.put('/product/edit', isAuthenticated, upload.single("file"), new EditProductController().handle);
+router.get('/product', isAuthenticated, new ListProductByCategoryController().handle);
+router.get('/products', isAuthenticated, new ListProductsController().handle);
+router.delete('/product/remove', isAuthenticated, new RemoveProductController().handle);
+
+// Sale Routes
+router.put("/sale/product", isAuthenticated, new SaleProductController().handle);
 
 // Products routes
 export { router };
